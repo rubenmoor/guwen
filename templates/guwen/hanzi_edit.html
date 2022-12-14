@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load selectable_tags %}
+
+{% block title %}
+	Edit Hanzi
+{% endblock title %}
+
+{% block head %}
+{% include_ui_theme %}	
+{{ form.media.css }}
+{% endblock head %}
+
+{% block content %}
+{% crispy form %}
+{% endblock %}
+
+{% block scripts %}
+{% include_jquery_libs %}
+{{ form.media.js }}
+{% endblock scripts %}

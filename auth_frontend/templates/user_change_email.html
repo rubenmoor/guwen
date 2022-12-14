@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Change Email{% endblock %}
+
+{% block content %}
+
+<form class='form-horizontal' role='form' method="post" action="{% url 'user_change_email' %}">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	{% buttons %}
+		<button type='reset' class='btn btn-link' data-dismiss='modal'>Cancel</button>
+		<button type='submit' class='btn btn-primary'>Submit</button>
+	{% endbuttons %}
+</form>
+
+{% endblock %}

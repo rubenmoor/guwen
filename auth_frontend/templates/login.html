@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<form role='form' method="post" action="{% url 'login' %}">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	{% buttons %}
+	    	<button type="submit" class="btn btn-primary">Login</button> or <a href={% url 'user_new' %}>register</a> as new user.
+	    	Forgot your password? <a href="{% url 'password_reset' %}">Reset</a>.
+	{% endbuttons %}
+	<input type='hidden' name='next' value='{{ next }}'>
+</form>
+
+{% endblock %}

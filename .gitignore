@@ -1,0 +1,10 @@
+/media/
+/static_root/
+*.swp
+*.pyc
+*.pid
+*.sqlite3
+*.json
+*.xml
+*.sql
+*.gz

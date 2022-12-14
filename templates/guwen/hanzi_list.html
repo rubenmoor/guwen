@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Show all{% endblock %}
+
+{% block content %}
+{% if hanzi_list %}
+    <section>
+    <table id="hanziList">
+    <tr>
+        <th>ID</th>
+        <th>Char</th>
+        <th>Pinyin</th>
+        <th>HPrim</th>
+        <th>RPrim</th>
+        <th>#Strokes</th>
+        <th>HBook</th>
+        <th>HLesson</th>
+        <th>HFrame</th>
+        <th>dEI</th>
+        <th>Compl</th>
+        <th>Locked</th>
+        <th>Keyword</th>
+        <th>Primitive meanings</th>
+        <th>Elements</th>
+    </tr>
+    {% for hanzi in hanzi_list %}
+    <tr class="{% cycle 'even' 'odd' %}">
+        <td>{{ hanzi.heisigID }}</td>
+        <td>
+            <a class="hanzi" href="{% url 'hanzi_show' hanzi.heisigBook hanzi.heisigID %}">
+                {{ hanzi.char }}
+            </a>
+        </td>
+        <td>{{ hanzi.getPinyinString }}</td>
+        <td>
+        {% if hanzi.isHeisigPrimitive %}
+        yes
+        {% else %}
+        no
+        {% endif %}
+        </td>
+        <td>
+        {% if hanzi.isRealPrimitive %}
+        yes
+        {% else %}
+        no
+        {% endif %}
+        </td>
+        <td>{{ hanzi.numStrokes }}</td>
+        <td>{{ hanzi.heisigBook }}</td>
+        <td>{{ hanzi.heisigLesson }}</td>
+        <td>{{ hanzi.heisigFrame }}</td>
+        <td>{{ hanzi.getDataExceptionInfo }}</td>
+        <td>
+        {% if hanzi.isDataComplete %}
+        yes
+        {% else %}
+        no
+        {% endif %}
+        </td>
+        <td>
+        {% if hanzi.isDataLocked %}
+        yes
+        {% else %}
+        no
+        {% endif %}
+        </td>
+        <td>{{ hanzi.termKeyword.term }}</td>
+        <td>{{ hanzi.getPrimitiveMeaningsString }}</td>
+        <td>{{ hanzi.getElementsString }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+    <div class="pagination">
+        {% if hanzi_list.has_previous %}
+            <a href="?page={{ hanzi_list.previous_page_number }}">&lsaquo;</a>
+        {% endif %}
+        Page <b>{{ hanzi_list.number }}</b> of <b>{{ hanzi_list.paginator.num_pages }}</b>
+        {% if hanzi_list.has_next %}
+            <a href="?page={{ hanzi_list.next_page_number }}">&rsaquo;</a>
+        {% endif %}
+    </div>
+    </section>
+{% else %}
+   <p>No characters in database</p>
+{% endif %}
+{% endblock %}

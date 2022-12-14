@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+
+{% block title %}Cedict Update{% endblock %}
+
+{% block content %}
+<section>
+	
+	{% crispy form %}
+	
+</section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+{% if hanzi_list %}
+    <table id="hanziList">
+    <tr>
+        <th>HBook</th>
+        <th>HLesson</th>
+        <th>HFrame</th>
+        <th>Keyword</th>
+        <th>Char</th>
+        <th>Pinyin</th>
+        <th>Primitive meanings</th>
+        <th>Elements</th>
+    </tr>
+    {% for hanzi in hanzi_list %}
+    <tr class="{% cycle 'even' 'odd' %}">
+        <td>{{ hanzi.heisigBook }}</td>
+        <td>{{ hanzi.heisigLesson }}</td>
+        <td>{{ hanzi.heisigFrame }}</td>
+        <td>{{ hanzi.termKeyword.term }}</td>
+        <td>
+            <a class="hanzi" href="{% url 'hanzi_show' hanzi.heisigBook hanzi.heisigID %}">{{ hanzi.char }}</a>
+        </td>
+        <td>{{ hanzi.getPinyinString }}</td>
+        <td>{{ hanzi.getPrimitiveMeaningsString }}</td>
+        <td>{{ hanzi.getElementsString }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+{% else %}
+   <p>No matches found in database</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %}{{ hanzi.termKeyword }}{% endblock %}
+
+{% block content %}
+<section>
+    <table id="hanzi">
+    <tr>
+        <td id="elements" valign="top">
+            <h3>Elements</h3>
+            {% if hanziComponents %}
+            <table id="components">
+            {% for hanziComponent in hanziComponents %}
+            <tr class="{% cycle 'odd' 'even' %}">
+                <td>{{ hanziComponent.getPinyinString }}</td>
+                <td><a class="hanzi" href="{% url 'hanzi_show' hanziComponent.heisigBook hanziComponent.heisigID %}">{{ hanziComponent.char }}</a></td>
+                <td>
+                    <ul class="none">
+                        <li class="selected">{{ hanziComponent.getSelTermPrimitiveMeaning }}</li>
+                        {% for term in hanziComponent.getOtherTermPrimitiveMeanings %}
+                        <li>{{ term }}</li>
+                        {% endfor%}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+            </table>
+            {% else %}
+            No components.
+            {% endif %}
+        </td>
+        <td valign="top">
+            <table>
+                <tr>
+                    <td id="keyword">
+                        <h1>{{ hanzi.termKeyword }}</h1>
+                        <div id="primitiveMeanings">
+                            <ul class="none">
+                                {% for pm in hanziPrimitiveMeanings %}
+                                <li class="weak">{{ pm.term }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </td>
+                    {% if user.is_authenticated %}
+                        <td id='edit_hanzi'>
+                            <a href="{% url 'hanzi_edit' hanzi.pk %}" title='Edit'>
+                                <span class='glyphicon glyphicon-edit'></span>
+                            </a>
+                            <a href="{% url 'hanzi_add' %}" title='Add new' accesskey="a">
+                                <span class='glyphicon glyphicon-plus'></span>
+                            </a>
+                            <a href="{% url 'cedict_update' %}" title='update cedict'>
+                                <span class='glyphicon glyphicon-book'></span>
+                            </a>
+                        </td>
+                    {% endif %}
+                </tr>
+            </table>
+            <div id="bigHanzi">
+                {% if hanzi.char %}
+                {{ hanzi.char }}
+                {% else %}
+                &mdash;
+                {% endif %}
+            </div>
+            <table id="heisigInfo">
+            <tr>
+                <th>volume</th>
+                <th>lesson</th>
+                <th>frame</th>
+            </tr>
+            <tr>
+                <td>{{ hanzi.heisigBook }}</td>
+                <td>{{ hanzi.heisigLesson }}</td>
+                <td>
+                    {% if hanzi.heisigFrame == 0 %}
+                        &mdash;
+                    {% else %}
+                        {% if prev_hanzi %}
+                            <a href="{% url 'hanzi_show' prev_hanzi.heisigBook prev_hanzi.heisigID %}">&lsaquo;</a>
+                        {% else %}
+                            &lsaquo;
+                        {% endif %}
+                        {{ hanzi.heisigFrame }}
+                        {% if next_hanzi %}
+                            <a href="{% url 'hanzi_show' next_hanzi.heisigBook next_hanzi.heisigID %}">&rsaquo;</a>
+                        {% else %}
+                            &rsaquo;
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            </table>
+            <div class="sep"></div>
+            <ul class="lexical">
+                {% for entry in hanzi.ptrSyllableLexicalEntry.all %}
+                    <li class="pinyin">{{ entry.syllable }}</li>
+            		{% if not entry.lexical_entry %}
+                		<li>&mdash;</li>
+            		{% else %}
+                        <li>{{ entry.lexical_entry }}</li>
+            		{% endif %}
+                {% endfor %}
+            </ul>
+        </td>
+        <td id="users" valign="top">
+            <h3>Appears in</h3>
+            <div id="tableContainer">
+            {% if hanziUsers %}
+            <table id="users">
+                {% for hanziUser in hanziUsers %}
+                <tr class="{% cycle 'odd' 'even' %}">
+                    <td>{{ hanziUser.termKeyword }}</td>
+                    <td><a class="hanzi" href="{% url 'hanzi_show' hanziUser.heisigBook hanziUser.heisigID %}">{{ hanziUser.char }}</a></td>
+                    <td>{{ hanziUser.getPinyinString }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            No users.
+            {% endif %}
+            </div>
+        </td>
+    </tr>
+    </table>
+</section>
+{% endblock %}
